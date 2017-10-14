@@ -3,6 +3,12 @@ Primary project and documentation for Thrift Shop
 
 The Thrift Shop is a microservices application built using [Thrift-Server](https://github.com/creditkarma/thrift-server).  It is used to demonstrate how to build a complete application based on the Thrift tools built @creditkarama.
 
+## Table Of Contents
+
+1. [Key principals](#key-principals)
+1. [Technology Stack](#technology-stack)
+1. [Architecture](#architecture)
+
 ## Key principals
 
 ### Scalable
@@ -49,10 +55,20 @@ The Thrift Shop is a microservices application built using [Thrift-Server](https
 * Elastic scaling
 
 
-## Architecture
+## Technology Stack
 
 * GraphQL API gateway
 * Request / response API with Thrift
 * RPC with HTTP/2 and LinkerD
 * Event sourcing with Kafka and Cassandra
 * Metrics and monitoring with Kafka / Influxdb / Grafana
+
+## Architecture
+
+* GraphQL server - Provides client API
+* Catalog Service - Maintains the list of available products and prices
+* Inventory Service - Immutable store that tracks current qty
+* Shopping Cart - Maintains the active shopping carts by user
+* Order Management - An async service that transitions a shopping cart into an order and notifies other services
+* Users - Maintain users credinitials and settings
+* Session - Session management services that tracks active tokens and sessions
