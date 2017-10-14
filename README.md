@@ -1,7 +1,7 @@
 # thrift-shop
 Primary project and documentation for Thrift Shop
 
-The Thrift Shop is a microservices application built using [Thrift-Server](https://github.com/creditkarma/thrift-server).  It is used to demonstrate how to build a complete application based on the Thrift tools built @creditkarama.
+The Thrift Shop is a micro-services application built using [Thrift-Server](https://github.com/creditkarma/thrift-server).  It is used to demonstrate how to build a complete application based on the Thrift tools built @creditkarama.
 
 ## Table Of Contents
 
@@ -45,7 +45,7 @@ The Thrift Shop is a microservices application built using [Thrift-Server](https
 * User behavior tracking
 * Dashboard
 
-### Experimentations
+### Experimentation
 * A/B testing
 * Canary deploy
 
@@ -70,5 +70,6 @@ The Thrift Shop is a microservices application built using [Thrift-Server](https
 * Inventory Service - Immutable store that tracks current qty
 * Shopping Cart - Maintains the active shopping carts by user
 * Order Management - An async service that transitions a shopping cart into an order and notifies other services
-* Users - Maintain users credinitials and settings
+* Users - Maintain users credentials and settings
 * Session - Session management services that tracks active tokens and sessions
+* Recommender - A recommendation service based on previous purchasing behavior
