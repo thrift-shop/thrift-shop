@@ -12,10 +12,10 @@ The Thrift Shop is a micro-services application built using [Thrift-Server](http
 ## Key principals
 
 ### Scalable
-* 100k per minute 
+* 100k per minute
 * 25% writes
 * 50% reads
-* 99% latency < 500ms
+* 99% GraphQL query latency < 500ms
 * Eventually consistent within 100ms
 
 ### Resilient

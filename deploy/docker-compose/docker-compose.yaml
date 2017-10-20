@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  catalog:
+    build: ../catalog/
+    container_name: catalog
+    environment:
+      - PORT=3010
+    ports: ["3010:3010"]
+    # depends_on:
+    #   - linkerd
+
+  inventory:
+    build: ../inventory/
+    container_name: inventory
+    environment:
+      - PORT=3020
+    ports: ["3020:3020"]
+    # depends_on:
+    #   - linkerd
+
+  api:
+    build: ../api-gateway/
+    container_name: api
+    environment:
+      - PORT=3000
+      - CATALOGADDR=catalog:3010
+      - INVENTORYADDR=inventory:3020
+    ports: ["3000:3000"]
+    depends_on:
+      # - linkerd
+      - catalog
+      - inventory
+
+  # linkerd:
+  #   image: buoyantio/linkerd:0.8.2
+  #   container_name: linkerd
+  #   ports: ["8080:8080", "8081:8081", "9990:9990"]
+  #   volumes: ["./config:/config:ro"]
+  #   command: /config/linkerd.yaml
+  #
+  # namerd:
+  #   image: buoyantio/namerd:0.8.2
+  #   container_name: namerd
+  #   ports: ["4100:4100", "4180:4180", "9991:9991"]
+  #   volumes: ["./config:/config:ro"]
+  #   command: /config/namerd.yaml
