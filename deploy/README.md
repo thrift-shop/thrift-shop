@@ -5,6 +5,7 @@ Sub directories contain scripts and configuration for deployment target platform
 This includes:
 
 * docker-compose
+* [Istio](http://istio.io)
 
 The intention is to also support the following:
 
