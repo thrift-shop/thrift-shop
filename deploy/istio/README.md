@@ -35,7 +35,7 @@ cd thrift-shop
 Build the source using Node 8 and NPM 5
 
 ```ssh
-./bin/build-all.sh
+sh ./bin/build-all.sh
 ```
 
 Build the docker files using docker compose

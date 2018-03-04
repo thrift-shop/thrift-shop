@@ -5,10 +5,21 @@ The Thrift Shop application is packaged using a Docker Compose file.
 In this version we create a Docker network and DNS is achieved by using the internal Docker DNS, which reads network alias entries provided by docker-compose.
 
 ## Pre-requisites
+
 * Install Docker
 * Install Docker Compose
 
+## Building Thrift Shop
+
+This will walk you through the process of getting the full Thrift Shop application and building it
+
+### Get Thrift Shop source
+
+Get the source from GitHub
+
 ```sh
+mkdir thrift-shop-app
+cd thrift-shop-app
 git clone https://github.com/thrift-shop/thrift-shop.git
 git clone https://github.com/thrift-shop/catalog.git
 git clone https://github.com/thrift-shop/inventory.git
@@ -16,23 +27,69 @@ git clone https://github.com/thrift-shop/api-gateway.git
 cd thrift-shop
 ```
 
+### Building from source
+
+Build the source using Node 8 and NPM 5
+
+```ssh
+sh ./bin/build-all.sh
+```
+
+Build the docker files using docker compose
+
+```ssh
+docker-compose -f deploy/docker-compose/docker-compose.yaml build
+```
+
 ## Provision infrastructure
 
 ```sh
-docker-compose -f deploy/docker-compose/docker-compose.yml up -d
+docker-compose -f deploy/docker-compose/docker-compose.yaml up -d
 ```
 
-## (Optional) Run with Fluentd logging
+## Testing the application
 
-If you want to run the application using a more advanced logging setup based on Fluentd + ELK stack, you can add the logging compose file to override some settings and add some extra containers:
+The application comes with an API gateway built with GraphQL.  You can use the GraphQL query toll to validate that all the services are running
 
-```sh
-docker-compose -f deploy/docker-compose/docker-compose.yml -f deploy/docker-compose/docker-compose.logging.yml up -d
+```ssh
+open http://localhost:3000
 ```
-Once deployed, you should be able to reach Kibana on http://localhost:5601.
 
-## Run tests
-There’s a load test provided as a service in this compose file. For more information see Load Test. It will run when the compose is started up, after a delay of 60s. This is a load test provided to simulate user traffic to the application. This will send some traffic to the application, which will form the connection graph that you view in Scope or Weave Cloud.
+Paste this query into GraphiQL and run it
+
+```graphql
+{ allItems { itemId status { qty } } }
+```
+
+Expected results
+
+```json
+{
+  "data": {
+    "allItems": [
+      {
+        "itemId": "1001",
+        "status": {
+          "qty": 5
+        }
+      },
+      {
+        "itemId": "1002",
+        "status": {
+          "qty": 3
+        }
+      },
+      {
+        "itemId": "1010",
+        "status": {
+          "qty": 12
+        }
+      }
+    ]
+  }
+}
+```
 
 ## Cleaning up
+
 docker-compose -f deploy/docker-compose/docker-compose.yml down
