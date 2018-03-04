@@ -1,0 +1,56 @@
+version: '2'
+services:
+  catalog-v1-init:
+    image: docker.io/istio/proxy_init:0.6.0
+    cap_add:
+      - NET_ADMIN
+    network_mode: "container:catalog"
+    command:
+      - -p
+      - "15001"
+      - -u
+      - "1337"
+  catalog-v1-sidecar:
+    image: docker.io/istio/proxy_debug:0.6.0
+    network_mode: "container:catalog"
+    entrypoint:
+      - su
+      - istio-proxy
+      - -c
+      - "/usr/local/bin/pilot-agent proxy -v 2 --serviceregistry Consul --serviceCluster catalog-v1 --zipkinAddress zipkin:9411 --configPath /var/lib/istio >/tmp/envoy.log"
+  inventory-v1-init:
+    image: docker.io/istio/proxy_init:0.6.0
+    cap_add:
+      - NET_ADMIN
+    network_mode: "container:inventory"
+    command:
+      - -p
+      - "15001"
+      - -u
+      - "1337"
+  inventory-v1-sidecar:
+    image: docker.io/istio/proxy_debug:0.6.0
+    network_mode: "container:inventory"
+    entrypoint:
+      - su
+      - istio-proxy
+      - -c
+      - "/usr/local/bin/pilot-agent proxy -v 2 --serviceregistry Consul --serviceCluster inventory-v1 --zipkinAddress zipkin:9411 --configPath /var/lib/istio >/tmp/envoy.log"
+  api-v1-init:
+    image: docker.io/istio/proxy_init:0.6.0
+    cap_add:
+      - NET_ADMIN
+    network_mode: "container:api"
+    command:
+      - -p
+      - "15001"
+      - -u
+      - "1337"
+  api-v1-sidecar:
+    image: docker.io/istio/proxy_debug:0.6.0
+    network_mode: "container:api"
+    entrypoint:
+      - su
+      - istio-proxy
+      - -c
+      - "/usr/local/bin/pilot-agent proxy -v 2 --serviceregistry Consul --serviceCluster api-v1 --zipkinAddress zipkin:9411 --configPath /var/lib/istio >/tmp/envoy.log"

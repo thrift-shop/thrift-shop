@@ -1,0 +1,39 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: api-default
+spec:
+# Route rules are the same across platforms. The rule files differ in the DNS domain used for the platform.
+  destination:
+    service: api.service.consul
+  precedence: 1
+  route:
+  - labels:
+      version: v1
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: catalog-default
+spec:
+# Route rules are the same across platforms. The rule files differ in the DNS domain used for the platform.
+  destination:
+    service: catalog.service.consul
+  precedence: 1
+  route:
+  - labels:
+      version: v1
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: inventory-default
+spec:
+# Route rules are the same across platforms. The rule files differ in the DNS domain used for the platform.
+  destination:
+    service: inventory.service.consul
+  precedence: 1
+  route:
+  - labels:
+      version: v1
+

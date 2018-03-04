@@ -29,6 +29,8 @@ The Thrift Shop is a micro-services application built using [Thrift-Server](http
 * Sync and Async APIs consistent contracts
 * Centralized / discoverable API repository
 
+All services have well defined API contracts
+
 ### Observability
 * Performance metrics
 * Distributed tracing

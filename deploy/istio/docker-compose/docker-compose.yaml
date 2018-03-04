@@ -1,0 +1,66 @@
+version: '2'
+services:
+  catalog-v1:
+    build: ../../../../catalog/
+    container_name: catalog
+    networks:
+      istiomesh:
+    dns:
+      - 172.28.0.1
+      - 8.8.8.8
+    dns_search:
+        - service.consul
+    environment:
+      - PORT=9080
+      - SERVICE_NAME=catalog
+      - SERVICE_TAGS=version|v1
+      - SERVICE_PROTOCOL=http
+    expose:
+      - "9080"
+
+  inventory-v1:
+    build: ../../../../inventory/
+    container_name: inventory
+    networks:
+      istiomesh:
+    dns:
+      - 172.28.0.1
+      - 8.8.8.8
+    dns_search:
+        - service.consul
+    environment:
+      - PORT=9080
+      - SERVICE_NAME=inventory
+      - SERVICE_TAGS=version|v1
+      - SERVICE_PROTOCOL=http
+    expose:
+      - "9080"
+
+  api-v1:
+    build: ../../../../api-gateway/
+    container_name: api
+    networks:
+      istiomesh:
+        ipv4_address: 172.28.0.14
+    dns:
+      - 172.28.0.1
+      - 8.8.8.8
+    dns_search:
+        - service.consul
+    environment:
+      - PORT=9080
+      - SERVICE_NAME=api
+      - SERVICE_TAGS=version|v1
+      - SERVICE_PROTOCOL=http
+      - CONSUL_ADDRESS=http://consul:8500
+      - CONSUL_KV_DC=dc1
+      - CONSUL_KEYS=services/api-gateway
+    ports:
+      - "3000:9080"
+    expose:
+      - "9080"
+
+networks:
+  istiomesh:
+    external:
+      name: consul_istiomesh
