@@ -1,0 +1,127 @@
+##################################################################################################
+# catalog service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  labels:
+    app: catalog
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: catalog
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catalog-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: catalog
+        version: v1
+    spec:
+      containers:
+      - name: catalog
+        image: gcr.io/istio-191401/github-thrift-shop-catalog:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# inventory service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory
+  labels:
+    app: inventory
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: inventory
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: inventory-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: inventory
+        version: v1
+    spec:
+      containers:
+      - name: inventory
+        image: gcr.io/istio-191401/github-thrift-shop-inventory:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# api services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: api
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: api-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api
+        version: v1
+    spec:
+      containers:
+      - name: api
+        image: gcr.io/istio-191401/github-thrift-shop-api-gateway:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+###########################################################################
+# Ingress resource (gateway)
+##########################################################################
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway
+  annotations:
+    kubernetes.io/ingress.class: "istio"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /graphql
+        backend:
+          serviceName: api
+          servicePort: 9080
+      - path: /api
+        backend:
+          serviceName: api
+          servicePort: 9080
+---
